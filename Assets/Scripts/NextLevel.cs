@@ -8,10 +8,9 @@ public class NextLevel : MonoBehaviour
 
     public GameObject PlayerStuff;
     public GameObject Player;
-    public GameObject Squares;
 
     private Vector2 PlayerOGPos;
-    WeightAddition weightAdditionScript;
+    WeightAdjustments weightAdjustmentsScript;
 
     public GameObject level1;
     public GameObject level2;
@@ -22,12 +21,13 @@ public class NextLevel : MonoBehaviour
     public GameObject ParachuteButt;
     public GameObject PopBalloon;
     public GameObject DropWeight;
+    public GameObject DropParachute;
 
     public GameObject Panel;
 
     private void Start()
     {
-        weightAdditionScript = GameObject.Find("Square").GetComponent<WeightAddition>();
+        weightAdjustmentsScript = GameObject.Find("Player").GetComponent<WeightAdjustments>();
         PlayerOGPos = Player.transform.position;
     }
 
@@ -38,12 +38,6 @@ public class NextLevel : MonoBehaviour
             level1.SetActive(true);
             level2.SetActive(false);
             level3.SetActive(false);
-
-            BalloonButt.SetActive(true);
-            WeightButt.SetActive(false);
-            ParachuteButt.SetActive(false);
-            PopBalloon.SetActive(true);
-            DropWeight.SetActive(false);
         }
 
         if (Level == 2)
@@ -51,12 +45,6 @@ public class NextLevel : MonoBehaviour
             level2.SetActive(true);
             level1.SetActive(false);
             level3.SetActive(false);
-
-            BalloonButt.SetActive(true);
-            WeightButt.SetActive(true);
-            ParachuteButt.SetActive(false);
-            PopBalloon.SetActive(true);
-            DropWeight.SetActive(true);
         }
 
         if (Level == 3)
@@ -64,12 +52,6 @@ public class NextLevel : MonoBehaviour
             level3.SetActive(true);
             level1.SetActive(false);
             level2.SetActive(false);
-
-            BalloonButt.SetActive(true);
-            WeightButt.SetActive(false);
-            ParachuteButt.SetActive(true);
-            PopBalloon.SetActive(false);
-            DropWeight.SetActive(false);
         }
 
         if (Level == 4)
@@ -83,11 +65,14 @@ public class NextLevel : MonoBehaviour
         if (collision.tag == "Player")
         {
             PlayerStuff.transform.position = new Vector2(0, 0);
-            Squares.transform.position = new Vector2(PlayerStuff.transform.position.x, PlayerStuff.transform.position.y - 0.75f);
             Player.transform.position = PlayerOGPos;
             Level += 1;
-            weightAdditionScript.balloonAmount = 0;
-            weightAdditionScript.weightAmount = 0;
+            weightAdjustmentsScript.balloon.itemAmount = 0;
+            weightAdjustmentsScript.weight.itemAmount = 0;
+            weightAdjustmentsScript.parachute.itemAmount = 0;
+            weightAdjustmentsScript.balloonSpeed = 1;
+            weightAdjustmentsScript.weightSpeed = 1;
+            weightAdjustmentsScript.parachuteSpeed = 1;
         }
     }
 }

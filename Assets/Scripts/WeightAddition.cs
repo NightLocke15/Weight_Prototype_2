@@ -18,7 +18,7 @@ public class WeightAddition : MonoBehaviour
 
 
     public GameObject Player;
-    public GameObject Top;
+   // public GameObject Top;
     public GameObject Balloon1;
     public GameObject Balloon2;
     public GameObject Balloon3;
@@ -28,14 +28,14 @@ public class WeightAddition : MonoBehaviour
 
     private void Update()
     {
-        transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x, (weightAmount*weightWeight) + (balloonAmount*balloonWeight) - 0.75f), parachuteSpeed * weightSpeed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x, (weightAmount*weightWeight) + (balloonAmount*balloonWeight)), parachuteSpeed * weightSpeed * Time.deltaTime);
 
-        Top.transform.position = new Vector2(Player.transform.position.x, Player.transform.position.y + 0.75f);
+       // Top.transform.position = new Vector2(Player.transform.position.x, Player.transform.position.y + 0.75f);
 
-        if (transform.position.x != Player.transform.position.x)
-        {
-            transform.position = new Vector2(Player.transform.position.x, Player.transform.position.y - 0.75f);
-        }
+        //if (transform.position.x != Player.transform.position.x)
+        //{
+           // transform.position = new Vector2(Player.transform.position.x, Player.transform.position.y - 0.75f);
+       // }
 
         if (parachute)
         {
