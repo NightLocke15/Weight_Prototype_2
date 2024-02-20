@@ -16,7 +16,13 @@ public class WeightAdjustments : MonoBehaviour
     public float bigballoonSpeed = 0;
     public float weightSpeed = 1;
     public float parachuteSpeed = 1;
+
+    public float weightMoveSpeed = 1;
+    public float parachuteMoveSpeed = 1;
     public TextMeshProUGUI weightNumber;
+
+    public Collider2D playerCollider;
+    public Collider2D platformCollider;
 
     public GameObject poppedBalloon;
 
@@ -26,23 +32,37 @@ public class WeightAdjustments : MonoBehaviour
     {
         objectGraphicsScript = GetComponent<ObjectGraphics>();
 
-        balloon = new Item(1, "Balloon", 0, 1.3f, 0.2f);        
-        bigballoon = new Item(1, "Big Balloon", 0, 3.9f, 0.2f);
-        weight = new Item(3, "Weight", 0, -0.6f, 2f);
-        parachute = new Item(4, "Parachute", 0, 0, 0.3f);
+        balloon = new Item(1, "Balloon", 0, 1.3f, 0.2f, 1);        
+        bigballoon = new Item(1, "Big Balloon", 0, 3.9f, 0.3f, 1);
+        weight = new Item(3, "Weight", 0, -0.6f, 1.5f, 0.5f);
+        parachute = new Item(4, "Parachute", 0, 0, 0.3f, 0.7f);
     }
 
     private void Update()
     {
-        transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x, 
-            (weight.itemAmount * weight.itemWeight) + (balloon.itemAmount * balloon.itemWeight) + (bigballoon.itemAmount * bigballoon.itemWeight)), 
-            (bigballoonSpeed + balloonSpeed) * weightSpeed * parachuteSpeed * speed * Time.deltaTime);
-        Debug.Log(transform.position);
-
-        if (transform.position.y == 0)
+        if (playerCollider.IsTouching(platformCollider))
         {
+            transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x,
+            transform.position.y), (bigballoonSpeed + balloonSpeed) * weightSpeed * parachuteSpeed * speed * Time.deltaTime);
+
             poppedBalloon.SetActive(false);
         }
+        else
+        {
+            transform.position = Vector2.MoveTowards(transform.position, new Vector2(transform.position.x,
+            (weight.itemAmount * weight.itemWeight) + (balloon.itemAmount * balloon.itemWeight) + (bigballoon.itemAmount * bigballoon.itemWeight)),
+            (bigballoonSpeed + balloonSpeed) * weightSpeed * parachuteSpeed * speed * Time.deltaTime);
+        }
+        
+        Debug.Log(transform.position);
+
+        if (transform.position.y <= 0)
+        {
+            poppedBalloon.SetActive(false);
+            transform.position = new Vector2(transform.position.x, 0);
+        }
+
+
     }
 
     public void BalloonButt()
@@ -61,6 +81,7 @@ public class WeightAdjustments : MonoBehaviour
     {
         weight.itemAmount += 1;
         weightSpeed = weight.itemSpeed;
+        weightMoveSpeed = weight.moveSpeed;
         weightNumber.text = "" + weight.itemAmount;
     }
 
@@ -68,6 +89,7 @@ public class WeightAdjustments : MonoBehaviour
     {
         parachute.itemAmount += 1;
         parachuteSpeed = parachute.itemSpeed;
+        parachuteMoveSpeed = parachute.moveSpeed;
     }
 
     public void PopBalloon()
@@ -95,12 +117,14 @@ public class WeightAdjustments : MonoBehaviour
     {
         weight.itemAmount = 0;
         weightSpeed = 1;
+        weightMoveSpeed = 1;
     }
 
     public void RemoveParachute()
     {
         parachute.itemAmount = 0;
         parachuteSpeed = 1;
+        parachuteMoveSpeed = 1;
     }
 }
 
@@ -111,13 +135,15 @@ public class Item
     public float itemAmount;
     public float itemWeight;
     public float itemSpeed;
+    public float moveSpeed;
 
-    public Item(int _ID, string _Name, float _itemAmount, float _itemWeight, float _itemSpeed)
+    public Item(int _ID, string _Name, float _itemAmount, float _itemWeight, float _itemSpeed, float _moveSpeed)
     {
         ID = _ID;
         Name = _Name;
         itemAmount = _itemAmount;
         itemWeight = _itemWeight;
         itemSpeed = _itemSpeed;
+        moveSpeed = _moveSpeed;
     }
 }

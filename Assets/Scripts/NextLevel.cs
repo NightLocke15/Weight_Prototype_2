@@ -17,11 +17,16 @@ public class NextLevel : MonoBehaviour
     public GameObject level3;
 
     public GameObject BalloonButt;
+    public GameObject BigBalloonButt;
     public GameObject WeightButt;
     public GameObject ParachuteButt;
     public GameObject PopBalloon;
+    public GameObject PopBigBalloon;
     public GameObject DropWeight;
     public GameObject DropParachute;
+
+    private float timer = 0;
+    private bool platform = true;
 
     public GameObject Panel;
 
@@ -29,6 +34,9 @@ public class NextLevel : MonoBehaviour
     {
         weightAdjustmentsScript = GameObject.Find("Player").GetComponent<WeightAdjustments>();
         PlayerOGPos = Player.transform.position;
+
+        ParachuteButt.SetActive(false);
+        DropParachute.SetActive(false);
     }
 
     private void Update()
@@ -52,6 +60,30 @@ public class NextLevel : MonoBehaviour
             level3.SetActive(true);
             level1.SetActive(false);
             level2.SetActive(false);
+
+            WeightButt.SetActive(false);
+            DropWeight.SetActive(false);
+            ParachuteButt.SetActive(true);
+            DropParachute.SetActive(true);
+            BigBalloonButt.SetActive(false);
+            PopBigBalloon.SetActive(false);
+            BalloonButt.SetActive(false);
+            PopBalloon.SetActive(false);
+
+            if (platform)
+            {
+                Player.transform.position = new Vector2(0, 9);
+                timer += Time.deltaTime;
+            }
+            else
+            {
+
+            }
+
+            if (timer >= 0.5f)
+            {
+                platform = false;
+            }
         }
 
         if (Level == 4)
@@ -68,11 +100,20 @@ public class NextLevel : MonoBehaviour
             Player.transform.position = PlayerOGPos;
             Level += 1;
             weightAdjustmentsScript.balloon.itemAmount = 0;
+            weightAdjustmentsScript.bigballoon.itemAmount = 0;
             weightAdjustmentsScript.weight.itemAmount = 0;
             weightAdjustmentsScript.parachute.itemAmount = 0;
             weightAdjustmentsScript.balloonSpeed = 1;
+            weightAdjustmentsScript.bigballoonSpeed = 0;
             weightAdjustmentsScript.weightSpeed = 1;
             weightAdjustmentsScript.parachuteSpeed = 1;
+            weightAdjustmentsScript.weightMoveSpeed = 1;
+            weightAdjustmentsScript.parachuteMoveSpeed = 1;
         }
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }
